@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const AppError = require('./utils/AppError');
+const globalErrorController = require('./controllers/errorController');
 // MIDDLEWARES
 console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === 'development'){
@@ -35,15 +36,6 @@ app.all('*', (req, res, next)=>{
   err.status = 'Not Found';
   next(err);
 })
+app.use(globalErrorController);
 
-app.use((error, req, res, next)=>{
-  error.statusCode = error.statusCode || 500;
-  error.status = error.status || 'Fail';
-  // console.error(error)
-  res.status(error.statusCode).json({
-    Code:  error.statusCode,
-    Status:  error.status,
-    Message: error.message
-  })
-})
 module.exports = app;
