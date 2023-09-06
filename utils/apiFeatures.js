@@ -13,7 +13,7 @@ class APIFeatures {
         /\b(gte|gt|lte|lt)\b/g,
         match => `$${match}`
       ); // \b to match exact value in regex
-  
+      console.log(JSON.parse(queryObjStr));
       this.query = this.query.find(JSON.parse(queryObjStr));
       return this;
     }
@@ -30,7 +30,7 @@ class APIFeatures {
   
     limitFields() {
       if (this.queryString.fields) {
-        const fields = this.queryString.fields.split(',').join(' ');
+        const fields = this.queryString.fields.split(',').join('');
         // const fields = this.queryString.fields.replace(/\b(,)\b/g, ` `);
         this.query = this.query.select(fields);
       } else {
@@ -44,7 +44,7 @@ class APIFeatures {
         // skip: parseInt(req.query.page) || '',
         // limit:  parseInt(req.query.limit) || ''
         skip: ((this.queryString.page * 1 || 1) - 1) * this.queryString.limit,
-        limit: this.queryString.limit * 1 || 100
+        limit: this.queryString.limit * 1 || 100 
       };
   
       if (this.queryString.page || this.queryString.limit) {

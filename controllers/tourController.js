@@ -10,7 +10,8 @@ exports.aliasGetTopTours = (req, res, next) => {
 
 exports.getAllTours = async (req, res) => {
   try {
-    let features = new APIFeatures(Tour.find(), req.query)
+    console.log( req.query);
+    let features = new APIFeatures(Tour, req.query)
       .filter()
       .sort()
       .limitFields()
@@ -257,9 +258,9 @@ exports.getMonthlyPlan = async (req, res) => {
           numTourStarts: -1
         }
       },
-      {
-        $limit: 1
-      }
+      // {
+      //   $limit: 1
+      // }
       // }
       // {
       //   $project: { startDates: 1 }

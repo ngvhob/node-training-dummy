@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const AppError = require('./utils/AppError');
 // MIDDLEWARES
 console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === 'development'){
@@ -28,14 +29,21 @@ const userRouter = require(`${__dirname}/routes/userRouters`);
 // ROUTE MOUNTING USING MIDDLEWARE CONCEPT //
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/user', userRouter);
-
-
 app.all('*', (req, res, next)=>{
-  res.status(404).json({
-    Code: 404,
-    Status: 'failed',
-    Message: `Can't find ${req.originalUrl}`
-  });
-  next();
+  const err = new AppError( `Can't find ${req.originalUrl}`);
+  err.statusCode = 404;
+  err.status = 'Not Found';
+  next(err);
+})
+
+app.use((error, req, res, next)=>{
+  error.statusCode = error.statusCode || 500;
+  error.status = error.status || 'Fail';
+  console.error(error)
+  res.status(error.statusCode).json({
+    Code:  error.statusCode,
+    Status:  error.status,
+    Message: error.message
+  })
 })
 module.exports = app;
