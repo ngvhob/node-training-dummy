@@ -39,7 +39,7 @@ app.all('*', (req, res, next)=>{
 app.use((error, req, res, next)=>{
   error.statusCode = error.statusCode || 500;
   error.status = error.status || 'Fail';
-  console.error(error)
+  // console.error(error)
   res.status(error.statusCode).json({
     Code:  error.statusCode,
     Status:  error.status,
