@@ -5,6 +5,18 @@ const handleCastErrorDb = err =>{
   return new AppError(message, 400);
 }
 
+const handleDuplicacyDb = err =>{
+  const message  = `Duplicate field value "${err.keyValue.name}", Please use another value or name.`
+  return new AppError(message, 400);
+}
+
+const handleValidatorErrorDb = err =>{
+  const Errors = Object.values(err.errors).map((el)=>(el.message));
+  console.log(Errors);
+  const message  = `Invalid value.${Errors.join('. ')}`
+  return new AppError(message, 400);
+}
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     Code: err.statusCode,
@@ -22,7 +34,6 @@ const sendErrorProd = (err, res) => {
       Message: err.message
     });
   } else {
-    // console.error(err);
     res.status(500).json({
       Status: 'Error',
       Message: 'Something went wrong!'
@@ -40,8 +51,9 @@ module.exports = (error, req, res, next) => {
       break;
     default:
       let err = {...error};
-      const errName = error.name;
-      if(errName === 'CastError')  err = handleCastErrorDb(err);
+      if(error.name === 'CastError')  err = handleCastErrorDb(err);
+      if(error.code === 11000)  err = handleDuplicacyDb(err);
+      if(error.name === 'ValidationError')  err = handleValidatorErrorDb(err);
       sendErrorProd(err, res);
       break;
   }
