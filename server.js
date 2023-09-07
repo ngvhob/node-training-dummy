@@ -27,5 +27,5 @@ const port = process.env.PORT;
 
 // console.log(process.env);
 app.listen(port, () => {
-  console.log(`App Running On Port ${port}....`);
+  console.log(`App Running In ${process.env.NODE_ENV} On Port ${port}....`);
 });
