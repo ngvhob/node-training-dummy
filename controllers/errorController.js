@@ -12,7 +12,6 @@ const handleDuplicacyDb = err =>{
 
 const handleValidatorErrorDb = err =>{
   const Errors = Object.values(err.errors).map((el)=>(el.message));
-  console.log(Errors);
   const message  = `Invalid value.${Errors.join('. ')}`
   return new AppError(message, 400);
 }

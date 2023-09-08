@@ -1,3 +1,10 @@
+// process.on('uncaughtException', error => {
+//   console.log(error.name);
+//   console.log('Uncaught Exception , Application Stopped.');
+//   process.exit(1);
+// });
+
+
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
@@ -16,16 +23,19 @@ mongoose
   })
   .then(() => {
     console.log('DB Connected.');
-  })
-  .catch(err => {
-    console.log(err);
-    console.log(DB);  
   });
 
 const app = require(`./app`);
 const port = process.env.PORT;
 
-// console.log(process.env);
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App Running In ${process.env.NODE_ENV} On Port ${port}....`);
+});
+
+process.on('unhandledRejection', error => {
+  console.log(error.name);
+  console.log('Unhandled Rejection, Application Stopped.');
+  server.close(() => {
+    process.exit(1);
+  });
 });

@@ -27,9 +27,12 @@ const tourRouter = require(`${__dirname}/routes/tourRouters`);
 // eslint-disable-next-line import/no-dynamic-require
 const userRouter = require(`${__dirname}/routes/userRouters`);
 
+const authRouter = require(`${__dirname}/routes/authRouters`);
+
 // ROUTE MOUNTING USING MIDDLEWARE CONCEPT //
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/auth', authRouter);
 app.all('*', (req, res, next)=>{
   const err = new AppError( `Can't find ${req.originalUrl}`);
   err.statusCode = 404;
