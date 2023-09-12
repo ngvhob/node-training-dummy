@@ -15,7 +15,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm
+    passwordConfirm: req.body.passwordConfirm,
+    passwordChangedAt : req.body.passwordChangedAt
   });
   let token = await signToken(newUser._id);
   if (newUser) {
@@ -66,5 +67,14 @@ exports.protect = catchAsync(async (req, res, next) => {
     next(new AppError('You must be logged in to view this data.', 401));
   }
   const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const currentUser = await User.findById(decode.id);
+  if(!currentUser){
+    next(new AppError('The user belonging to this token does not exit.', 401));
+  }
+  let expiredCheck = await currentUser.changePasswordAfter(decode.iat);
+  if(expiredCheck){
+    next(new AppError('Password changed please verify login again.', 401));
+  }
+  req.user = currentUser;
   next();
 });

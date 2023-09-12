@@ -1,28 +1,33 @@
-const AppError = require("../utils/AppError");
+const AppError = require('../utils/AppError');
 
-const handleCastErrorDb = err =>{
-  const message  = `Invalid ${err.path} : ${err.value}`
+const handleCastErrorDb = err => {
+  const message = `Invalid ${err.path} : ${err.value}`;
   return new AppError(message, 400);
-}
+};
 
-const handleDuplicacyDb = err =>{
-  const message  = `Duplicate field value "${err.keyValue.name}", Please use another value or name.`
+const handleDuplicacyDb = err => {
+  const message = `Duplicate field value "${err.keyValue.name}", Please use another value or name.`;
   return new AppError(message, 400);
-}
+};
 
-const handleValidatorErrorDb = err =>{
-  const Errors = Object.values(err.errors).map((el)=>(el.message));
-  const message  = `Invalid value.${Errors.join('. ')}`
+const handleValidatorErrorDb = err => {
+  const Errors = Object.values(err.errors).map(el => el.message);
+  const message = `Invalid value.${Errors.join('. ')}`;
   return new AppError(message, 400);
-}
+};
 
-const handleJWTError = err =>{
-  const message  = `${err.message.toUpperCase()} !` ?? `JWT Expired.`;
+const handleJWTError = err => {
+  let message = err.message;
+  if (err.name === 'JsonWebTokenError') {
+    message = `${err.message.toUpperCase()} !` ?? `JWT Inavlid.`;
+  } else {
+    message = `${err.message.toUpperCase()} !` ?? `JWT Expired.`;
+  }
   return new AppError(message, 401);
-}
+};
 
 const sendErrorDev = (err, res) => {
-  console.log(err);
+  console.log('ERROR 💥 ' + err);
   res.status(err.statusCode).json({
     Code: err.statusCode,
     Status: err.status,
@@ -55,12 +60,13 @@ module.exports = (error, req, res, next) => {
       sendErrorDev(error, res);
       break;
     default:
-      let err = {...error};
+      let err = { ...error };
       console.log(error.name);
-      if(error.name === 'CastError')  err = handleCastErrorDb(err);
-      if(error.code === 11000)  err = handleDuplicacyDb(err);
-      if(error.name === 'ValidationError')  err = handleValidatorErrorDb(err);
-      if(error.name === 'TokenExpiredError')  err = handleJWTError(err);
+      if (error.name === 'CastError') err = handleCastErrorDb(err);
+      if (error.code === 11000) err = handleDuplicacyDb(err);
+      if (error.name === 'ValidationError') err = handleValidatorErrorDb(err);
+      if (error.name === 'TokenExpiredError' || 'JsonWebTokenError')
+        err = handleJWTError(err);
       sendErrorProd(err, res);
       break;
   }
