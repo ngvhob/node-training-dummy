@@ -16,7 +16,13 @@ const handleValidatorErrorDb = err =>{
   return new AppError(message, 400);
 }
 
+const handleJWTError = err =>{
+  const message  = `${err.message.toUpperCase()} !` ?? `JWT Expired.`;
+  return new AppError(message, 401);
+}
+
 const sendErrorDev = (err, res) => {
+  console.log(err);
   res.status(err.statusCode).json({
     Code: err.statusCode,
     Status: err.status,
@@ -50,9 +56,11 @@ module.exports = (error, req, res, next) => {
       break;
     default:
       let err = {...error};
+      console.log(error.name);
       if(error.name === 'CastError')  err = handleCastErrorDb(err);
       if(error.code === 11000)  err = handleDuplicacyDb(err);
       if(error.name === 'ValidationError')  err = handleValidatorErrorDb(err);
+      if(error.name === 'TokenExpiredError')  err = handleJWTError(err);
       sendErrorProd(err, res);
       break;
   }
