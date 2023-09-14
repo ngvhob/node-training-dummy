@@ -16,7 +16,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt : req.body.passwordChangedAt
+    passwordChangedAt: req.body.passwordChangedAt,
+    roles: req.body.roles
   });
   let token = await signToken(newUser._id);
   if (newUser) {
@@ -68,13 +69,38 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   const currentUser = await User.findById(decode.id);
-  if(!currentUser){
+  if (!currentUser) {
     next(new AppError('The user belonging to this token does not exit.', 401));
   }
   let expiredCheck = await currentUser.changePasswordAfter(decode.iat);
-  if(expiredCheck){
+  if (expiredCheck) {
     next(new AppError('Password changed please verify login again.', 401));
   }
   req.user = currentUser;
   next();
+});
+
+exports.forgetPassword = catchAsync(async (req, res, next) => {
+
+  const { email } = req.body;
+  if (!email) {
+    return next(new AppError('Please provide a valid email.', 400));
+  }
+  const user = await User.findOne({ email: email });
+
+  if (!user) {
+    return next(new AppError('No user found for the provided email.', 404));
+  }
+
+  const resetToken = user.createPasswordResetToken();
+  const status = await user.save();
+  if (status) {
+    res.status(201).json({
+      status: 'success',
+      data: {
+        message: 'Password reset mail sent!',
+        email: user.email
+      }
+    });
+  }
 });

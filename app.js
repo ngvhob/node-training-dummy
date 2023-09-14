@@ -5,9 +5,7 @@ const morgan = require('morgan');
 const AppError = require('./utils/AppError');
 const globalErrorController = require('./controllers/errorController');
 // MIDDLEWARES
-console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === 'development'){
-  console.log('IN DEV MODE');
   app.use(morgan('dev'));
 }
 app.use(express.json());

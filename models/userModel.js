@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const userSchema = mongoose.Schema({
   name: {
     type: String,
@@ -17,6 +18,12 @@ const userSchema = mongoose.Schema({
   photo: {
     type: String,
     required: [false]
+  },
+  roles: {
+    type: String,
+    required: [true, 'A user must have a role assigned.'],
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user'
   },
   password: {
     type: String,
@@ -38,6 +45,14 @@ const userSchema = mongoose.Schema({
       message: 'Password And  Confirm Password Must Be Same.'
     }
   },
+  passwordResetToken: {
+    type: String,
+    required: false
+  },
+  passwordResetExpires: {
+    type: Date,
+    required: false
+  },
   passwordChangedAt: { type: Date, required: [false] }
 });
 
@@ -57,16 +72,27 @@ userSchema.methods.correctPassword = async function(
 
 userSchema.methods.changePasswordAfter = async function(JWTTz) {
   if (this.passwordChangedAt) {
-    const changesTz = parseInt(this.passwordChangedAt.getTime()/1000, 10);
+    const changesTz = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
     console.log(JWTTz, changesTz, '\n\n');
     if (JWTTz < changesTz) {
-        console.log('JWTTz : ' + JWTTz);
-    }else{
-        console.log('changesTz : ' + changesTz);
+      console.log('JWTTz : ' + JWTTz);
+    } else {
+      console.log('changesTz : ' + changesTz);
     }
     return changesTz > JWTTz;
   }
   return false;
+};
+
+userSchema.methods.createPasswordResetToken = async function() {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  console.log({resetToken}, this.passwordResetToken);
+  return resetToken;
 };
 
 const User = mongoose.model('User', userSchema);

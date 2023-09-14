@@ -30,7 +30,7 @@ const app = require(`./app`);
 const port = process.env.PORT;
 
 const server = app.listen(port, () => {
-  console.log(`App Running In ${process.env.NODE_ENV} On Port ${port}....`);
+  console.log(`${process.env.NODE_ENV} server running on port ${port}.`);
 });
 
 process.on('unhandledRejection', error => {
