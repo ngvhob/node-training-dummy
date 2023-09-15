@@ -33,10 +33,10 @@ const server = app.listen(port, () => {
   console.log(`${process.env.NODE_ENV} server running on port ${port}.`);
 });
 
-process.on('unhandledRejection', error => {
-  console.log(error.name);
-  console.log('Unhandled Rejection, Application Stopped.');
-  server.close(() => {
-    process.exit(1);
-  });
-});
+// process.on('unhandledRejection', error => {
+//   console.log(error.name);
+//   console.log('Unhandled Rejection, Application Stopped.');
+//   server.close(() => {
+//     process.exit(1);
+//   });
+// });

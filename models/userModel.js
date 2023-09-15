@@ -57,6 +57,12 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre('save', async function(next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
@@ -73,11 +79,8 @@ userSchema.methods.correctPassword = async function(
 userSchema.methods.changePasswordAfter = async function(JWTTz) {
   if (this.passwordChangedAt) {
     const changesTz = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
-    console.log(JWTTz, changesTz, '\n\n');
     if (JWTTz < changesTz) {
-      console.log('JWTTz : ' + JWTTz);
     } else {
-      console.log('changesTz : ' + changesTz);
     }
     return changesTz > JWTTz;
   }
@@ -91,7 +94,6 @@ userSchema.methods.createPasswordResetToken = async function() {
     .update(resetToken)
     .digest('hex');
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-  console.log({resetToken}, this.passwordResetToken);
   return resetToken;
 };
 
