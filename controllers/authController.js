@@ -12,8 +12,18 @@ const signToken = async id => {
   });
 };
 
+const cookieOptions = {
+  expires:
+  new Date((Date.now() + process.env.JWT_COOKIE_EXPIRY * 24 * 60 * 60 * 1000)),
+  secure: false,
+  httpOnly: true
+};
+if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
 const createSendToken = async (user, statusCode, res) => {
   let token = await signToken(user._id);
+  console.log(cookieOptions);
+  res.cookie('jwt', token, cookieOptions);
   res.status(statusCode).json({
     status: 'success',
     token: token
