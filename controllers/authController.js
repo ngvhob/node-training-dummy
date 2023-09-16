@@ -30,7 +30,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     roles: req.body.roles
   });
   if (newUser) {
-    await createSendToken(currentUser, 201, res);
+    await createSendToken(newUser, 201, res);
   }
 });
 

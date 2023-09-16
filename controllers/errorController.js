@@ -61,7 +61,6 @@ module.exports = (error, req, res, next) => {
       break;
     default:
       let err = { ...error };
-      console.log(error.name);
       if (error.name === 'CastError') err = handleCastErrorDb(err);
       if (error.code === 11000) err = handleDuplicacyDb(err);
       if (error.name === 'ValidationError') err = handleValidatorErrorDb(err);
