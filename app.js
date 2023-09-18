@@ -60,7 +60,8 @@ const reviewRouter = require(`${__dirname}/routes/reviewRouters`);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/review', reviewRouter);
+app.use('/api/v1/reviews', reviewRouter);
+
 app.all('*', (req, res, next) => {
   const err = new AppError(`Can't find ${req.originalUrl}`);
   err.statusCode = 404;
