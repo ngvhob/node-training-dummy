@@ -30,13 +30,10 @@ const reviewSchema = new mongoose.Schema({
 
 
 reviewSchema.pre(/^find/, function (next) {
-    this.select('-__v');
+    // this.select('-__v');
     this.populate({
-        path: 'tour',
-        select: '-__v'
-    }).populate({
         path: 'user',
-        select: '-__v'
+        select: 'name'
     });;
     next();
 });

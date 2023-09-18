@@ -3,7 +3,9 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
-    const reviews = await Review.find();
+    let filter = {};
+    if (req.params.tourId) filter = { 'tour': req.params.tourId };
+    const reviews = await Review.find(filter);
     if (reviews) {
         res.status(200).json({
             msg: 'success',
@@ -14,13 +16,14 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
 });
 
 exports.createReviews = catchAsync(async (req, res, next) => {
-    const { review, rating, tour } = req.body;
-    const user = req.user._id;
+    if (!req.body.tour) req.body.tour = req.params.tourId;
+    if (!req.body.user) req.body.user = req.user._id;
+    const { review, rating } = req.body;
     const newReview = await Review.create({
         review: review,
         rating: rating,
-        tour: tour,
-        user: user
+        tour: req.body.tour,
+        user: req.body.user
     });
     if (newReview) {
         res.status(200).json({
