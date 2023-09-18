@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const slugify =  require('slugify');
+const slugify = require('slugify');
 const validator = require('validator');
+// const User = require('./userModel');
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -10,13 +11,13 @@ const tourSchema = new mongoose.Schema({
     minlength: [10, 'A Tour name must hame atleast 10 characters'],
     maxlength: [40, 'A Tour name must not be more then 40 characters'],
     // validate: [validator.isAlpha, 'Tour Name Must Contain Only Characters']
-  },slug: {
+  }, slug: {
     type: String,
-    default: function(){
-      return slugify( this.name, {lower : true});
+    default: function () {
+      return slugify(this.name, { lower: true });
     }
   }
-  ,duration: {
+  , duration: {
     type: Number,
     required: [true, 'A Tour Must Have Duration.']
   },
@@ -28,9 +29,9 @@ const tourSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A Tour Must Have A Difficulty'],
     enum: {
-    values : ['easy', 'medium', 'difficult'],
-    message: 'Difficulty can only be easy, medium and difficult'
-  }
+      values: ['easy', 'medium', 'difficult'],
+      message: 'Difficulty can only be easy, medium and difficult'
+    }
   },
   ratingAverage: {
     type: Number,
@@ -47,9 +48,9 @@ const tourSchema = new mongoose.Schema({
     required: [true, 'A Tour Must Have Price.']
   },
   priceDiscount: {
-    type:Number,
+    type: Number,
     validate: {
-      validator: function(){
+      validator: function () {
         return this.priceDiscount < this.price // 100 < 200 -> true
       },
       message: 'Discount Value Can Not Be More Then Tour Price!'
@@ -83,12 +84,82 @@ const tourSchema = new mongoose.Schema({
   secretTour: {
     type: Boolean,
     default: false
-  }
-},{toJSON: {virtuals: true}});
+  },
+  startLocation: {
+    type: {
+      type: String,
+      default: 'Point',
+      enum: {
+        values: ['Point'],
+        message: 'startLocation type can only be Point.'
+      }
+    },
+    coordinates: {
+      type: [Number],
+    },
+    address: {
+      type: String,
+    },
+    description: {
+      type: String,
+    }
+  },
+  locations: [{
+    type: {
+      type: String,
+      default: 'Point',
+      enum: {
+        values: ['Point'],
+        message: 'Location type can only be Point.'
+      }
+    },
+    coordinates: {
+      type: [Number],
+    },
+    address: {
+      type: String,
+    },
+    description: {
+      type: String,
+    },
+    day: {
+      type: Number,
+    }
+  }],
+  // guides: {
+  //   type: Array
+  // },
+  guides: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
+  ]
+}, { toJSON: { virtuals: true } });
 
-tourSchema.virtual('durationWeeks').get(function(){
-  return Math.round(this.duration/7);
+tourSchema.virtual('durationWeeks').get(function () {
+  return Math.round(this.duration / 7);
 });
+
+
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+})
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v'
+  });
+  next();
+});
+
+// tourSchema.pre('save', async function(next){
+//   const guidesPromises =  this.guides.map(async id => await User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// })
 
 // DOCUMENT MIDDLEWARE //
 // tourSchema.pre('save', function(next){
