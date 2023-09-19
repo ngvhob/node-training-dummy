@@ -13,7 +13,6 @@ class APIFeatures {
         /\b(gte|gt|lte|lt)\b/g,
         match => `$${match}`
       ); // \b to match exact value in regex
-      console.log(JSON.parse(queryObjStr));
       this.query = this.query.find(JSON.parse(queryObjStr));
       return this;
     }

@@ -5,12 +5,15 @@ const authController = require('../controllers/authController');
 
 Router.route('/')
   .get(reviewController.getAllReviews)
-  .post(authController.protect, reviewController.createReviews);
+  .post(
+    authController.protect,
+    reviewController.setDataToHeaders,
+    reviewController.createReviews
+  );
 
-Router.route('/:id').delete(
-  authController.protect,
-  authController.restrict,
-  reviewController.deleteReview
-);
+Router.route('/:id')
+  .get(reviewController.getReviewByPara)
+  .delete(authController.protect, reviewController.deleteReview)
+  .patch(authController.protect, reviewController.updateReview);
 
 module.exports = Router;

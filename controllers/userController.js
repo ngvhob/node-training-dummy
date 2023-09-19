@@ -17,38 +17,13 @@ const filterObj = (obj, ...values) => {
   return newObj;
 };
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-  res.status(200).json({
-    status: 'success',
-    requestedAt: requestedAt,
-    count: users.length,
-    data: {
-      Users: users
-    }
-  });
-});
+exports.getAllUsers = Factory.getAll(User);
 
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'Server Error',
-    message: 'Route Not defined'
-  });
-};
+exports.createUser = Factory.createOne(User, 'User not created!');
 
-exports.getUserByPara = (req, res) => {
-  res.status(500).json({
-    status: 'Server Error',
-    message: 'Route Not defined'
-  });
-};
+exports.getUserByPara = Factory.getOne(User);
 
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'Server Error',
-    message: 'Route Not defined'
-  });
-};
+exports.updateUser = Factory.updateOne(User);
 
 exports.deleteUser = Factory.deleteOne(User);
 
@@ -84,3 +59,10 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null
   });
 });
+
+exports.setUserId = (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+}
+
+exports.getMe = Factory.getOne(User);

@@ -13,8 +13,9 @@ const signToken = async id => {
 };
 
 const cookieOptions = {
-  expires:
-  new Date((Date.now() + process.env.JWT_COOKIE_EXPIRY * 24 * 60 * 60 * 1000)),
+  expires: new Date(
+    Date.now() + process.env.JWT_COOKIE_EXPIRY * 24 * 60 * 60 * 1000
+  ),
   secure: false,
   httpOnly: true
 };
@@ -81,15 +82,14 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.restrict = catchAsync(async (req, res, next) => {
-  const currentUser = await User.findById(req.user._id);
-  if (currentUser) {
-    if (currentUser.roles != 'admin'){
+exports.restrict = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.roles)) {
       next(new AppError('You are not authorized to perform this action.', 401));
     }
-  }
-  next();
-});
+    next();
+  };
+};
 
 exports.forgetPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body;
