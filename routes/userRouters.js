@@ -10,7 +10,7 @@ Router.route('/')
 Router.route('/:id')
   .get(userController.getUserByPara)
   .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+  .delete(authController.protect, authController.restrict,userController.deleteUser);
 
 Router.route('/update-profile').post(
   authController.protect,

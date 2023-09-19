@@ -22,7 +22,6 @@ if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
 const createSendToken = async (user, statusCode, res) => {
   let token = await signToken(user._id);
-  console.log(cookieOptions);
   res.cookie('jwt', token, cookieOptions);
   res.status(statusCode).json({
     status: 'success',
@@ -79,6 +78,16 @@ exports.protect = catchAsync(async (req, res, next) => {
     next(new AppError('Password changed please verify login again.', 401));
   }
   req.user = currentUser;
+  next();
+});
+
+exports.restrict = catchAsync(async (req, res, next) => {
+  const currentUser = await User.findById(req.user._id);
+  if (currentUser) {
+    if (currentUser.roles != 'admin'){
+      next(new AppError('You are not authorized to perform this action.', 401));
+    }
+  }
   next();
 });
 

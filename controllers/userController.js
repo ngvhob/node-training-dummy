@@ -2,7 +2,7 @@ const fs = require('fs');
 const User = require('../models/userModel');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
-
+const Factory = require('./handleFactory');
 const user = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/users.json`)
 );
@@ -50,12 +50,7 @@ exports.updateUser = (req, res) => {
   });
 };
 
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'Server Error',
-    message: 'Route Not defined'
-  });
-};
+exports.deleteUser = Factory.deleteOne(User);
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
