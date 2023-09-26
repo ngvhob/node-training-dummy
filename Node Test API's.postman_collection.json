@@ -36,7 +36,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/user?name=Vaibhav",
+							"raw": "{{URL}}/api/v1/user",
 							"host": [
 								"{{URL}}"
 							],
@@ -44,14 +44,9 @@
 								"api",
 								"v1",
 								"user"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Vaibhav"
-								}
 							]
-						}
+						},
+						"description": "Retrieves a list of all users."
 					},
 					"response": []
 				},
@@ -154,7 +149,8 @@
 								"user",
 								"me"
 							]
-						}
+						},
+						"description": "Retrieves a list of all users."
 					},
 					"response": []
 				},
@@ -226,7 +222,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\" : \"Jatin\",\r\n    \"email\" : \"Jatin@Jatin.com\",\r\n    \"password\" : \"12345678\",\r\n    \"passwordConfirm\" : \"12345678\",\r\n    \"roles\" : \"guide\"\r\n}",
+							"raw": "{\r\n    \"name\" : \"Jatin\",\r\n    \"email\" : \"Jatin@Jatin.com\",\r\n    \"password\" : \"{{PASS}}\",\r\n    \"passwordConfirm\" : \"{{PASS}}\",\r\n    \"roles\" : \"guide\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -244,7 +240,8 @@
 								"auth",
 								"signup"
 							]
-						}
+						},
+						"description": "Creates a new user account"
 					},
 					"response": []
 				},
@@ -266,7 +263,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\" : \"vaibhav@vaibhav.com\",\r\n    \"password\" : \"12345678\"\r\n}",
+							"raw": "{\r\n    \"email\" : \"admin@natours.io\",\r\n    \"password\" : \"{{PASS}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -284,7 +281,8 @@
 								"auth",
 								"login"
 							]
-						}
+						},
+						"description": "Logs in an existing user"
 					},
 					"response": []
 				},
@@ -334,7 +332,8 @@
 								"auth",
 								"update-password"
 							]
-						}
+						},
+						"description": "Updates the user's password after authentication."
 					},
 					"response": []
 				},
@@ -477,7 +476,8 @@
 								"auth",
 								"forget-password"
 							]
-						}
+						},
+						"description": "Sends a password reset email to the user's registered email address."
 					},
 					"response": []
 				},
@@ -518,7 +518,8 @@
 								"reset-password",
 								"60b73f2d704dcbb37c8e84f1eb9808423dc9e765c9880101e1cc892cf7f9f95a"
 							]
-						}
+						},
+						"description": "Resets the user's password using a provided reset token."
 					},
 					"response": []
 				},
@@ -575,7 +576,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/tours?ratingAverage[gte]=4.1",
+							"raw": "{{URL}}/api/v1/tours",
 							"host": [
 								"{{URL}}"
 							],
@@ -583,12 +584,6 @@
 								"api",
 								"v1",
 								"tours"
-							],
-							"query": [
-								{
-									"key": "ratingAverage[gte]",
-									"value": "4.1"
-								}
 							]
 						}
 					},
@@ -611,7 +606,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\r\n    \"name\": \"The Amazing Tour\",\r\n    \"duration\": 1,\r\n    \"maxGroupSize\": 1,\r\n    \"difficulty\": \"easy\",\r\n    \"price\": 500,\r\n    \"summary\": \"Breathtaking hike through the Canadian Banff National Park\",\r\n    \"imageCover\": \"tour-1-cover.jpg\",\r\n    \"ratingAverage\": 4.1, \r\n    \"guides\" : [\r\n        \"6500145ff98f7140d893c4ca\",\r\n        \"650551642aa73f31702e472a\"\r\n    ]\r\n  }",
+							"raw": "  {\r\n    \"name\": \"The Amazing Tour\",\r\n    \"duration\": 1,\r\n    \"maxGroupSize\": 1,\r\n    \"difficulty\": \"easy\",\r\n    \"price\": 500,\r\n    \"summary\": \"Breathtaking hike through the Canadian Banff National Park\",\r\n    \"imageCover\": \"tour-1-cover.jpg\"\r\n  }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -648,7 +643,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/tours/65093af144237914d0ad88b9",
+							"raw": "{{URL}}/api/v1/tours/650a9c363309dc3cec8bd033",
 							"host": [
 								"{{URL}}"
 							],
@@ -656,7 +651,7 @@
 								"api",
 								"v1",
 								"tours",
-								"65093af144237914d0ad88b9"
+								"650a9c363309dc3cec8bd033"
 							]
 						}
 					},
@@ -869,7 +864,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/reviews?rating=3",
+							"raw": "{{URL}}/api/v1/reviews",
 							"host": [
 								"{{URL}}"
 							],
@@ -877,12 +872,6 @@
 								"api",
 								"v1",
 								"reviews"
-							],
-							"query": [
-								{
-									"key": "rating",
-									"value": "3"
-								}
 							]
 						}
 					},
@@ -904,7 +893,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/reviews/65083e28d5b9a82e748828f9",
+							"raw": "{{URL}}/api/v1/reviews/650c2c4eedf1892a8c7690a9",
 							"host": [
 								"{{URL}}"
 							],
@@ -912,7 +901,7 @@
 								"api",
 								"v1",
 								"reviews",
-								"65083e28d5b9a82e748828f9"
+								"650c2c4eedf1892a8c7690a9"
 							]
 						}
 					},
@@ -935,7 +924,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\r\n    \"review\": \"A Good Tour\",\r\n    \"rating\": 4, \r\n    \"tour\" :\"5c88fa8cf4afda39709c2971\"\r\n  }",
+							"raw": "  {\r\n    \"review\": \"A Good Tour\",\r\n    \"rating\": 4, \r\n    \"tour\" :\"650c2c4eedf1892a8c7690a9\"\r\n  }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -981,7 +970,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/v1/reviews/65083bda550f33210c464755",
+							"raw": "{{URL}}/api/v1/reviews/650c2bd6ed052f08641d243e",
 							"host": [
 								"{{URL}}"
 							],
@@ -989,7 +978,7 @@
 								"api",
 								"v1",
 								"reviews",
-								"65083bda550f33210c464755"
+								"650c2bd6ed052f08641d243e"
 							]
 						}
 					},
@@ -1012,7 +1001,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"review\": \"It was good one\",\r\n    \"rating\" : 5\r\n}",
+							"raw": "{\r\n    \"review\": \"It was good one\",\r\n    \"rating\" : 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1020,7 +1009,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/v1/reviews/65083fc52739360fd8d34b0c",
+							"raw": "{{URL}}/api/v1/reviews/650c2c4eedf1892a8c7690a9",
 							"host": [
 								"{{URL}}"
 							],
@@ -1028,7 +1017,7 @@
 								"api",
 								"v1",
 								"reviews",
-								"65083fc52739360fd8d34b0c"
+								"650c2c4eedf1892a8c7690a9"
 							]
 						}
 					},
@@ -1056,7 +1045,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\r\n    \"review\": \"Bad Tour\",\r\n    \"rating\": 2\r\n  }",
+							"raw": "  {\r\n    \"review\": \"Not Good Tour\",\r\n    \"rating\": 3\r\n  }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1064,7 +1053,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/v1/tours/5c88fa8cf4afda39709c2971/reviews",
+							"raw": "{{URL}}/api/v1/tours/650a9c363309dc3cec8bd033/reviews",
 							"host": [
 								"{{URL}}"
 							],
@@ -1072,7 +1061,7 @@
 								"api",
 								"v1",
 								"tours",
-								"5c88fa8cf4afda39709c2971",
+								"650a9c363309dc3cec8bd033",
 								"reviews"
 							]
 						}
@@ -1154,7 +1143,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/v1/tours/5c88fa8cf4afda39709c2971/reviews",
+							"raw": "{{URL}}/api/v1/tours/650a9c363309dc3cec8bd033/reviews",
 							"host": [
 								"{{URL}}"
 							],
@@ -1162,8 +1151,68 @@
 								"api",
 								"v1",
 								"tours",
-								"5c88fa8cf4afda39709c2971",
+								"650a9c363309dc3cec8bd033",
 								"reviews"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Geospatial Tours",
+			"item": [
+				{
+					"name": "Get Tours Within",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/tours-within/distance/400/center/34.20725938207231,-119.05014269251781/unit/mi",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"tours-within",
+								"distance",
+								"400",
+								"center",
+								"34.20725938207231,-119.05014269251781",
+								"unit",
+								"mi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Distances From A Point",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/tours/distances/34.20725938207231,-119.05014269251781/unit/mi",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tours",
+								"distances",
+								"34.20725938207231,-119.05014269251781",
+								"unit",
+								"mi"
 							]
 						}
 					},
