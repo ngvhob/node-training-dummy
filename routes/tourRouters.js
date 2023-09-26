@@ -21,6 +21,12 @@ Router.route('/')
     tourController.createTour
   );
 
+Router.route('/tours-within/distance/:distance/center/:lonlat/unit/:unit').get(
+  tourController.getToursWithin
+);
+
+Router.route('/distances/:lonlat/unit/:unit').get(tourController.getDistances);
+
 Router.use(authController.protect);
 
 Router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);

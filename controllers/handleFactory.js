@@ -7,7 +7,8 @@ const queryVerifyNotFound = async (bool, res, next) => {
     return next(new AppError('No documnet found!', 404));
   } else {
     res.status(201).json({
-      status: 'success',
+      Status: 'success',
+      Results: bool.length,
       Document: bool
     });
   }
@@ -18,7 +19,8 @@ const queryVerifyNotCreated = async (bool, res, next, message) => {
     return next(new AppError(message, 500));
   } else {
     res.status(201).json({
-      status: 'success',
+      Status: 'success',
+      Results: bool.length,
       Document: bool
     });
   }
@@ -27,7 +29,7 @@ const queryVerifyNotCreated = async (bool, res, next, message) => {
 exports.getAll = Model =>
   catchAsync(async (req, res, next) => {
     let filter = {};
-    if (req.params.tourId) filter = { 'tour': req.params.tourId };
+    if (req.params.tourId) filter = { tour: req.params.tourId };
     let features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
@@ -35,7 +37,8 @@ exports.getAll = Model =>
       .paginate();
 
     const Doc = await features.query;
-    await queryVerifyNotFound(Doc, res, next)
+    // const Doc = await features.query.explain();
+    await queryVerifyNotFound(Doc, res, next);
   });
 
 exports.getOne = (Model, populateOptions) =>
