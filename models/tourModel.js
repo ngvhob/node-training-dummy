@@ -181,10 +181,10 @@ tourSchema.pre(/^find/, function(next) {
 // })
 
 // DOCUMENT MIDDLEWARE //
-// tourSchema.pre('save', function(next){
-//   this.slug = slugify(this.name, {lower : true});
-//   next();
-// })
+tourSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 // tourSchema.pre('save', function(next){
 //   console.log("Something is about to be saved");

@@ -1,4 +1,5 @@
 // BASIC SETUP
+const path = require('path');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -20,7 +21,10 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   message: 'Too many request, please try again after 1 hour.'
 });
-
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 app.use('/api', limiter);
 // ADD HEADERS FOR SECURITY
 app.use(helmet());
@@ -40,7 +44,6 @@ app.use(xss());
 // MANAGE DATA POLLUTION
 app.use(hpp());
 
-
 app.use((req, res, next) => {
   requestedAt = new Date().toISOString();
   next();
@@ -56,6 +59,10 @@ const authRouter = require(`${__dirname}/routes/authRouters`);
 
 const reviewRouter = require(`${__dirname}/routes/reviewRouters`);
 
+const viewRouter = require(`${__dirname}/routes/viewRouters`);
+
+// WEB PAGE
+app.use('/', viewRouter);
 // ROUTE MOUNTING USING MIDDLEWARE CONCEPT //
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/user', userRouter);

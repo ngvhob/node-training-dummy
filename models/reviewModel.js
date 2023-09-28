@@ -34,7 +34,7 @@ reviewSchema.pre(/^find/, function(next) {
   // this.select('-__v');
   this.populate({
     path: 'user',
-    select: 'name'
+    select: 'name photo'
   });
   next();
 });
