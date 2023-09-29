@@ -1,8 +1,20 @@
 extends base
 include _reviewBox
+block append mapbox 
+    script(src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js')
+    link(href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css', rel='stylesheet')
 
-block append js 
+block js 
     script(src="/js/mapbox.js") 
+    <script>
+        //- mapboxgl.accessToken = 'pk.eyJ1Ijoibmd2aG9iIiwiYSI6ImNsbjMxeXppMjBkM2oycWw5OHkzb3p0cmMifQ.8zMdNqOuQfYGh0uqpeFYsg';
+        //- const map = new mapboxgl.Map({
+        //- container: 'map', // container ID
+        //- style: 'mapbox://styles/mapbox/streets-v12', // style URL
+        //- center: [-74.5, 40], // starting position [lng, lat]
+        //- zoom: 9, // starting zoom
+        //- });
+    </script>
 mixin overviewBox(description, value, iconName)
     .overview-box__detail
         svg.overview-box__icon
@@ -62,9 +74,7 @@ block content
         each image, i in tourData.images
             +pictureBox(image, `${tourData.name}-${i+1}`)
     section.section-map
-        - const locations = JSON.stringify(tourData.locations);
-            h1= locations
-            #map(data-locations= locations)
+            #map(data-locations = `${JSON.stringify(tourData.locations)}`)
     section.section-reviews
             .reviews
                 each review in tourData.reviews
