@@ -58,6 +58,17 @@ exports.login = catchAsync(async (req, res, next) => {
   await createSendToken(user, 201, res);
 });
 
+exports.logout = catchAsync(async (req, res, next) => {
+  res.cookie('jwt', 'logout', {
+    expires: new Date(Date.now() + 10 + 1000),
+    httpOnly: true
+  });
+
+  res.status(200).json({
+    status: 'success'
+  });
+});
+
 exports.protect = catchAsync(async (req, res, next) => {
   let token = null;
   if (
@@ -65,6 +76,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   if (!token) {
     next(new AppError('You must be logged in to view this data.', 401));
@@ -179,3 +192,28 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     next(new AppError(error, 500));
   }
 });
+
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      const decode = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+      const currentUser = await User.findById(decode.id);
+      if (!currentUser) {
+        return next();
+      }
+      let expiredCheck = await currentUser.changePasswordAfter(decode.iat);
+      if (expiredCheck) {
+        return next();
+      }
+      // ASSIGN LOGGED IN USER TO LOCALS RES.
+      res.locals.user = currentUser;
+      return next();
+    } catch (error) {
+      return next();
+    }
+  }
+  return next();
+};

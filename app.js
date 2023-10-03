@@ -10,6 +10,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 // GLOBAL MIDDLEWARES
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -34,6 +35,7 @@ app.use(
     limit: '10kb'
   })
 );
+app.use(cookieParser());
 
 // DATA SANITIZATION AGAINST NOSQL QUERY INJECTIONS
 app.use(mongoSanitize());
@@ -46,6 +48,7 @@ app.use(hpp());
 
 app.use((req, res, next) => {
   requestedAt = new Date().toISOString();
+  console.log(req.cookies);
   next();
 });
 
@@ -64,9 +67,9 @@ const viewRouter = require(`${__dirname}/routes/viewRouters`);
 // WEB PAGE
 app.use('/', viewRouter);
 // ROUTE MOUNTING USING MIDDLEWARE CONCEPT //
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/user', userRouter);
-app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {

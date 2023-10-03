@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const Tour = require('../models/tourModel');
+const AppError = require('../utils/AppError');
 exports.getOverview = catchAsync(async (req, res, next) => {
   const Tours = await Tour.find();
   res.status(200).render('overview', {
@@ -13,12 +14,14 @@ exports.getTour = catchAsync(async (req, res, next) => {
     path: 'reviews',
     fields: 'review rating user'
   });
-  if (!Tour) {
-    res.status(404).json({
-      status: 'Not Found'
-    });
+  if (!TourData) {
+    return next(new AppError(`The request tour was not found.`, 404));
   }
   res
     .status(200)
     .render('tour', { title: `${TourData.name} Tour`, tourData: TourData });
+});
+
+exports.getLogin = catchAsync(async (req, res, next) => {
+  res.status(200).render('login', { title: `Login` });
 });
