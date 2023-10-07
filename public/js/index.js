@@ -4,7 +4,7 @@ import { displayMap } from './mapbox';
 
 const baseURL = `http://127.0.0.1:3000/`;
 // DOM ELEMETS
-const form = document.querySelector('.form');
+const form = document.querySelector('.form.form--login');
 const map = document.getElementById('map');
 const logOut = document.querySelector('.nav__el--logout');
 if (form) {

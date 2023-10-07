@@ -12230,7 +12230,7 @@ var _login = require("./login");
 var _mapbox = require("./mapbox");
 var baseURL = "http://127.0.0.1:3000/";
 // DOM ELEMETS
-var form = document.querySelector('.form');
+var form = document.querySelector('.form.form--login');
 var map = document.getElementById('map');
 var logOut = document.querySelector('.nav__el--logout');
 if (form) {
@@ -12276,7 +12276,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61155" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64888" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

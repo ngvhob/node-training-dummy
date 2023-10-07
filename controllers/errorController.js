@@ -84,6 +84,7 @@ module.exports = (error, req, res, next) => {
       break;
     default:
       let err = { ...error };
+      err.message = error.message;
       if (req.originalUrl.startsWith('/api')) {
         if (error.name === 'CastError') err = handleCastErrorDb(err);
         if (error.code === 11000) err = handleDuplicacyDb(err);
@@ -92,7 +93,7 @@ module.exports = (error, req, res, next) => {
           err = handleJWTError(err);
         sendErrorProd(err, res, req);
       }
-      sendErrorProd(error, res, req);
+      sendErrorProd(err, res, req);
       break;
   }
 };

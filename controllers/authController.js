@@ -92,6 +92,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     next(new AppError('Password changed please verify login again.', 401));
   }
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
