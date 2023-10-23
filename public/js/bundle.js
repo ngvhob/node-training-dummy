@@ -12028,7 +12028,7 @@ var logout = exports.logout = /*#__PURE__*/function () {
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', 'Logged out successfully !');
             window.setTimeout(function () {
-              location.reload(true);
+              location.assign('/');
             }, 1000);
           }
           _context2.next = 10;
@@ -12077,7 +12077,7 @@ var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
           });
         case 4:
           res = _context.sent;
-          if (res.data.status === 'success') {
+          if (res.data.status === 'success' || res.data.status === 'Success') {
             (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully!!"));
             if (type != 'password') {
               window.setTimeout(function () {
@@ -12305,12 +12305,15 @@ if (form) {
 if (formUpdateData) {
   formUpdateData.addEventListener('submit', function (e) {
     e.preventDefault();
+    var form = new FormData();
     var name = document.getElementById('name').value;
     var email = document.getElementById('email').value;
-    (0, _updateSettings.updateSettings)({
-      name: name,
-      email: email
-    }, 'data', baseURL);
+    var photo = document.getElementById('photo').files[0];
+    form.append('name', name);
+    form.append('email', email);
+    form.append('photo', photo);
+    console.log(form);
+    (0, _updateSettings.updateSettings)(form, 'data', baseURL);
   });
 }
 if (formUserSettings) {
@@ -12383,7 +12386,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51432" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60891" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

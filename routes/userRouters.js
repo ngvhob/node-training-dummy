@@ -10,7 +10,7 @@ Router.route('/')
 Router.use(authController.protect);
 
 Router.route('/me')
-  .patch(userController.updateMe)
+  .patch(userController.uploadImage, userController.resizeUserPhoto, userController.updateMe)
   .get(userController.setUserId, userController.getMe);
 
 Router.route('/delete-profile').post(userController.deleteMe);

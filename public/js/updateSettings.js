@@ -12,7 +12,7 @@ export const updateSettings = async (body, type, baseurl) => {
       url: url,
       data: body
     });
-    if (res.data.status === 'success') {
+    if (res.data.status === 'success' || res.data.status === 'Success') {
       showAlert('success', `${type.toUpperCase()} updated successfully!!`);
       if (type != 'password') {
         window.setTimeout(() => {

@@ -33,9 +33,13 @@ const reviews = fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8');
 // IMPORT DATA INTO DB
 const importData = async () => {
   try {
-    await User.create(JSON.parse(users, { validateBeforeSave: false }));
-    await Tour.create(JSON.parse(tours));
-    await Review.create(JSON.parse(reviews));
+    const options = { maxTimeMS: 60000 };
+    await User.create(
+      JSON.parse(users, { validateBeforeSave: false }),
+      options
+    );
+    await Tour.create(JSON.parse(tours), options);
+    await Review.create(JSON.parse(reviews), options);
     console.log('Data Successfullly Seeded !');
   } catch (err) {
     console.log(err.message);
@@ -46,9 +50,24 @@ const importData = async () => {
 // DELETE ALL DATA FROM DB
 const deleteData = async () => {
   try {
-    await User.deleteMany();
-    await Tour.deleteMany();
-    await Review.deleteMany();
+    await User.deleteMany(
+      {},
+      {
+        maxTimeMS: 60000
+      }
+    );
+    await Tour.deleteMany(
+      {},
+      {
+        maxTimeMS: 60000
+      }
+    );
+    await Review.deleteMany(
+      {},
+      {
+        maxTimeMS: 60000
+      }
+    );
     console.log('Data Successfullly Deleted !');
   } catch (err) {
     console.log(err.message);

@@ -35,6 +35,8 @@ Router.route('/:id')
   .get(tourController.getTourByPara)
   .patch(
     authController.restrict('admin', 'lead-guide'),
+    tourController.uploadImage,
+    tourController.resizeTourPhotos,
     tourController.updateTour
   )
   .delete(
