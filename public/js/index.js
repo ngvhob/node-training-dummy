@@ -2,7 +2,7 @@ import '@babel/polyfill';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { displayMap } from './mapbox';
-import { bookTour } from './stripe';
+// import { bookTour } from './stripe';
 
 const baseURL = `http://127.0.0.1:3000/`;
 // DOM ELEMETS
@@ -72,9 +72,13 @@ if (logOut) {
 }
 
 if (buy) {
-  buy.addEventListener('click', (e)=>{
-    const tourID = buy.getAttribute('data-tour-id');
-    e.target.textContent = 'Processing..'
-    bookTour(tourID);
-  })
+  import('./stripe').then(({ bookTour }) => {
+    buy.addEventListener('click', (e) => {
+      const tourID = buy.getAttribute('data-tour-id');
+      e.target.textContent = 'Processing..';
+      bookTour(tourID); // Call bookTour function from the imported module with the extracted tourID
+    });
+  }).catch(err => {
+    console.error('Error importing stripe module:', err);
+  });
 }
