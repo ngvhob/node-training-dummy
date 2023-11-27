@@ -2,6 +2,7 @@ import '@babel/polyfill';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { displayMap } from './mapbox';
+import { bookTour } from './stripe';
 
 const baseURL = `http://127.0.0.1:3000/`;
 // DOM ELEMETS
@@ -10,6 +11,7 @@ const formUpdateData = document.querySelector('.form-user-data');
 const formUserSettings = document.querySelector('.form-user-settings');
 const map = document.getElementById('map');
 const logOut = document.querySelector('.nav__el--logout');
+const buy = document.getElementById('book-tour');
 if (form) {
   form.addEventListener('submit', e => {
     e.preventDefault();
@@ -67,4 +69,12 @@ if (logOut) {
     e.preventDefault();
     logout(baseURL);
   });
+}
+
+if (buy) {
+  buy.addEventListener('click', (e)=>{
+    const tourID = buy.getAttribute('data-tour-id');
+    e.target.textContent = 'Processing..'
+    bookTour(tourID);
+  })
 }

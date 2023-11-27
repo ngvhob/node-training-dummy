@@ -62,6 +62,7 @@ const userRouter = require(`${__dirname}/routes/userRouters`);
 const authRouter = require(`${__dirname}/routes/authRouters`);
 
 const reviewRouter = require(`${__dirname}/routes/reviewRouters`);
+const bookingRouter = require(`${__dirname}/routes/bookingRouters`);
 
 const viewRouter = require(`${__dirname}/routes/viewRouters`);
 
@@ -72,6 +73,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/booking', bookingRouter);
 
 app.all('*', (req, res, next) => {
   const err = new AppError(`Can't find ${req.originalUrl}`);
